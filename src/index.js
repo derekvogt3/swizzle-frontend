@@ -1,17 +1,62 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const firebaseConfig = {};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+console.log(auth);
+// createUserWithEmailAndPassword(auth, "another@gmail.com", "testpass123")
+//   .then((userCredential) => {
+//     // Signed in
+//     const user = userCredential.user;
+//     return user;
+//     // ...
+//   })
+//   .then((user) =>
+//     user
+//       .getIdToken(true)
+//       .then(function (idToken) {
+//         console.log(idToken);
+//       })
+//       .catch(function (error) {
+//         // Handle error
+//       })
+//   )
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//   });
+
+signInWithEmailAndPassword(auth, "test@gmail.com", "testpass123")
+  .then((userCredential) => {
+    // Signed in
+    const user = userCredential.user;
+    return user;
+    // ...
+  })
+  .then((user) =>
+    user
+      .getIdToken(true)
+      .then(function (idToken) {
+        console.log(idToken);
+      })
+      .catch(function (error) {
+        // Handle error
+      })
+  )
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
