@@ -2,7 +2,26 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        swizblue: {
+          dark: "#071A5E",
+          light: "#6B77A3",
+          DEFAULT: "#0a2587",
+        },
+
+        swizpurp: {
+          dark: "#570871",
+          light: "#B59FBD",
+          DEFAULT: "#7e0ca4",
+        },
+        swizpink: {
+          dark: "#9C1457",
+          light: "#A2748B",
+          DEFAULT: "#b11763",
+        },
+      },
+    },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
