@@ -1,18 +1,15 @@
 import Login from "../page_components/authentication/Login";
 import PhoneAuth from "../page_components/authentication/PhoneAuth";
-import ConfirmPhone from "../page_components/authentication/ConfirmPhone";
 import { useState, useEffect } from "react";
 
-export default function Authentication() {
+export default function Authentication({ setFireToken }) {
   const [authNav, setAuthNav] = useState(0);
 
   function currentPage() {
     if (authNav === 0) {
       return <Login setAuthNav={setAuthNav} />;
     } else if (authNav === 1) {
-      return <PhoneAuth setAuthNav={setAuthNav} />;
-    } else if (authNav === 2) {
-      return <ConfirmPhone />;
+      return <PhoneAuth setAuthNav={setAuthNav} setFireToken={setFireToken} />;
     }
   }
   return (

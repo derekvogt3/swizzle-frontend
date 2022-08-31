@@ -3,64 +3,23 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import firebase from "firebase/compat/app";
 
-// import { initializeApp } from "firebase/app";
-// import {
-//   getAuth,
-//   signInWithEmailAndPassword,
-//   createUserWithEmailAndPassword,
-// } from "firebase/auth";
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+};
 
-// const firebaseConfig = {
+const app = firebase.initializeApp(firebaseConfig);
 
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const auth = getAuth(app);
-// console.log(auth);
-// createUserWithEmailAndPassword(auth, "another@gmail.com", "testpass123")
-//   .then((userCredential) => {
-//     // Signed in
-//     const user = userCredential.user;
-//     return user;
-//     // ...
-//   })
-//   .then((user) =>
-//     user
-//       .getIdToken(true)
-//       .then(function (idToken) {
-//         console.log(idToken);
-//       })
-//       .catch(function (error) {
-//         // Handle error
-//       })
-//   )
-//   .catch((error) => {
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//   });
-
-// signInWithEmailAndPassword(auth, "test@gmail.com", "testpass123")
-//   .then((userCredential) => {
-//     // Signed in
-//     const user = userCredential.user;
-//     return user;
-//     // ...
-//   })
-//   .then((user) =>
-//     user
-//       .getIdToken(true)
-//       .then(function (idToken) {
-//         console.log(idToken);
-//       })
-//       .catch(function (error) {
-//         // Handle error
-//       })
-//   )
-//   .catch((error) => {
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//   });
+// To apply the default browser preference instead of explicitly setting it.
+// firebase.auth().useDeviceLanguage();
+//not sure what that means but look into it
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

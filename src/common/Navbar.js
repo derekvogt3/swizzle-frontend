@@ -16,7 +16,7 @@ const navigation = [
   { name: "Messages", href: "messages", pathTest: "/messages" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ setFireToken }) {
   const [currentNav, setCurrentNav] = useState(0);
   const location = useLocation();
 
@@ -126,15 +126,18 @@ export default function Navbar() {
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <div
                             className={classNames(
                               active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              "block  cursor-pointer px-4 py-2 text-sm text-gray-700"
                             )}
+                            onClick={() => {
+                              localStorage.removeItem("fireToken");
+                              setFireToken("");
+                            }}
                           >
                             Sign out
-                          </a>
+                          </div>
                         )}
                       </Menu.Item>
                     </Menu.Items>
@@ -197,22 +200,18 @@ export default function Navbar() {
                         tom@example.com
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      className="ml-auto flex-shrink-0 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
                   </div>
                   <div className="mt-3 space-y-1">
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
+                    <Link
+                      to="/profile"
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                      onClick={() => {
+                        close();
+                      }}
                     >
                       Your Profile
-                    </Disclosure.Button>
+                    </Link>
+
                     <Disclosure.Button
                       as="a"
                       href="#"
@@ -220,9 +219,16 @@ export default function Navbar() {
                     >
                       Settings
                     </Disclosure.Button>
-                    <Disclosure.Button className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
-                      Sign out
-                    </Disclosure.Button>
+                    <div
+                      className="cursor-pointer block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                      onClick={() => {
+                        localStorage.removeItem("fireToken");
+                        setFireToken("");
+                        close();
+                      }}
+                    >
+                      Sign Out
+                    </div>
                   </div>
                 </div>
               </>
