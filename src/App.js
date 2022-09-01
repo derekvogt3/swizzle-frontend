@@ -9,55 +9,61 @@ import Authentication from "./pages/Authentication";
 import { createContext } from "react";
 import { useEffect } from "react";
 import CreateUserProfile from "./page_components/profile/CreateUserProfile";
+import { useAuthState } from "react-firebase-hooks/auth";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 
-const UserContext = createContext();
+export const UserContext = React.createContext();
 
 function App({}) {
-  const [loaded, setLoaded] = useState(false);
-  const [user, setUser] = useState(false);
-  const [fireToken, setFireToken] = useState(getFireToken());
-  // if (!loaded) return <></>;
+  const auth = firebase.auth();
 
-  function getFireToken() {
-    if (localStorage.hasOwnProperty("fireToken")) {
-      return localStorage.getItem("fireToken");
-    }
-    return "";
+  const [loaded, setLoaded] = useState(false);
+  const [fireToken, setFireToken] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+  const [userObj, setUserObj] = useState({});
+
+  if (loading) {
+    console.log(loading);
   }
+
+  if (error) {
+    console.log(error);
+  }
+  console.log(userObj);
+
+  useEffect(() => {
+    if (user) {
+      user.getIdToken(true).then((idToken) => {
+        setFireToken(idToken);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (fireToken) {
       //check with django
-      fetch("http://localhost:8000/events/", {
+      fetch("http://localhost:8000/user/current/", {
         headers: { Authorization: fireToken },
       })
-        .then((res) => {
-          if (!res.ok) {
-            setFireToken("");
-            localStorage.removeItem("fireToken");
-            setUser(true);
-          }
-          return res.json();
-        })
-        .then((data) => console.log(data));
-
-      //check with django to authenticate,
-
-      //if not authenticated, remove firetoken from local storage
-
-      //else get the user profile
-      // if user profile isnt there, navigate to create profile section
-      //if user profile is there, navigate to the home page
+        .then((res) => res.json())
+        .then((data) => setUserObj(data));
     }
   }, [fireToken]);
 
-  if (!fireToken) return <Authentication setFireToken={setFireToken} />;
-
-  // if (!user) return <CreateUserProfile />;
+  if (!user || !userObj.first_name)
+    return (
+      <Authentication
+        setUserObj={setUserObj}
+        userObj={userObj}
+        user={user}
+        fireToken={fireToken}
+      />
+    );
 
   return (
-    <UserContext.Provider value={user}>
-      <Navbar setFireToken={setFireToken} />
+    <UserContext.Provider value={userObj}>
+      <Navbar setFireToken={setFireToken} auth={auth} />
       <Routes>
         <Route path="/" element={<Events />} />
         <Route path="invitations" element={<Invitations />}></Route>

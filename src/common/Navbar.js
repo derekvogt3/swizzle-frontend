@@ -5,6 +5,9 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -16,7 +19,9 @@ const navigation = [
   { name: "Messages", href: "messages", pathTest: "/messages" },
 ];
 
-export default function Navbar({ setFireToken }) {
+export default function Navbar({ setFireToken, auth }) {
+  const userObj = useContext(UserContext);
+
   const [currentNav, setCurrentNav] = useState(0);
   const location = useLocation();
 
@@ -134,6 +139,7 @@ export default function Navbar({ setFireToken }) {
                             onClick={() => {
                               localStorage.removeItem("fireToken");
                               setFireToken("");
+                              signOut(auth);
                             }}
                           >
                             Sign out
@@ -188,8 +194,7 @@ export default function Navbar({ setFireToken }) {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
+                        src={userObj.avatar}
                       />
                     </div>
                     <div className="ml-3">
@@ -225,6 +230,7 @@ export default function Navbar({ setFireToken }) {
                         localStorage.removeItem("fireToken");
                         setFireToken("");
                         close();
+                        signOut(auth);
                       }}
                     >
                       Sign Out

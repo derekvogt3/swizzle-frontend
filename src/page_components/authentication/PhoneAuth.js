@@ -41,17 +41,7 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
         const user = result.user;
         return user;
       })
-      .then((user) => {
-        console.log(user);
-        user
-          .getIdToken(true)
-          .then(function (idToken) {
-            setAuthNav(0);
-            localStorage.setItem("fireToken", idToken);
-            setFireToken(idToken);
-          })
-          .catch((error) => alert("error getting token"));
-      });
+      .catch((error) => alert("error getting user"));
   };
 
   return (

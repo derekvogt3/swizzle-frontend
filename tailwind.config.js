@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       colors: {
         swizblue: {
+          vlight: "#A6AFCF",
           dark: "#071A5E",
           light: "#6B77A3",
           DEFAULT: "#0a2587",

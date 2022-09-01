@@ -1,17 +1,33 @@
 import Login from "../page_components/authentication/Login";
 import PhoneAuth from "../page_components/authentication/PhoneAuth";
 import { useState, useEffect } from "react";
+import CreateUserProfile from "../page_components/profile/CreateUserProfile";
 
-export default function Authentication({ setFireToken }) {
+export default function Authentication({
+  userObj,
+  setUserObj,
+  user,
+  fireToken,
+}) {
   const [authNav, setAuthNav] = useState(0);
 
   function currentPage() {
-    if (authNav === 0) {
-      return <Login setAuthNav={setAuthNav} />;
-    } else if (authNav === 1) {
-      return <PhoneAuth setAuthNav={setAuthNav} setFireToken={setFireToken} />;
+    if (!user) {
+      if (authNav === 0) {
+        return <Login setAuthNav={setAuthNav} />;
+      }
+
+      if (authNav === 1) {
+        return <PhoneAuth setAuthNav={setAuthNav} />;
+      }
+    }
+    if (!userObj.first_name) {
+      return (
+        <CreateUserProfile setUserObj={setUserObj} fireToken={fireToken} />
+      );
     }
   }
+
   return (
     <>
       <div className="flex h-screen">
