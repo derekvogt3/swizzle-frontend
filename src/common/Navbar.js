@@ -43,17 +43,16 @@ export default function Navbar({ setFireToken, auth }) {
                 <div className="flex-shrink-0 flex items-center">
                   <img
                     className="block lg:hidden h-12 w-auto"
-                    src="S_LOGO 2.png"
+                    src="/S_LOGO 2.png"
                     alt="Workflow"
                   />
                   <img
                     className="hidden lg:block h-12 w-auto"
-                    src="S_LOGO 2.png"
+                    src="/S_LOGO 2.png"
                     alt="Workflow"
                   />
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   {navigation.map((nav, idx) => {
                     return (
                       <Link
@@ -61,7 +60,7 @@ export default function Navbar({ setFireToken, auth }) {
                         to={nav.href}
                         className={
                           idx === currentNav
-                            ? "border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                            ? "border-swizblue text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                             : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                         }
                         onClick={() => setCurrentNav(idx)}
@@ -75,7 +74,7 @@ export default function Navbar({ setFireToken, auth }) {
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 <button
                   type="button"
-                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-swizblue"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -84,12 +83,11 @@ export default function Navbar({ setFireToken, auth }) {
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
                   <div>
-                    <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-swizblue">
                       <span className="sr-only">Open user menu</span>
                       <img
-                        className="w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
+                        src={userObj.avatar}
+                        className="object-cover h-8 w-8 rounded-full"
                       />
                     </Menu.Button>
                   </div>
@@ -152,7 +150,7 @@ export default function Navbar({ setFireToken, auth }) {
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 {/* Mobile menu button */}
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-swizblue">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -168,7 +166,6 @@ export default function Navbar({ setFireToken, auth }) {
             {({ close }) => (
               <>
                 <div className="pt-2 pb-3 space-y-1 flex flex-col">
-                  {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                   {navigation.map((nav, idx) => {
                     return (
                       <Link
@@ -199,10 +196,10 @@ export default function Navbar({ setFireToken, auth }) {
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">
-                        Tom Cook
+                        {userObj.first_name + " " + userObj.last_name}
                       </div>
                       <div className="text-sm font-medium text-gray-500">
-                        tom@example.com
+                        {userObj.username}
                       </div>
                     </div>
                   </div>

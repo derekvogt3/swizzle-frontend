@@ -12,6 +12,7 @@ import CreateUserProfile from "./page_components/profile/CreateUserProfile";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import CreateEvent from "./page_components/events/CreateEvent";
 
 export const UserContext = React.createContext();
 
@@ -67,9 +68,13 @@ function App({}) {
       <Routes>
         <Route path="/" element={<Events />} />
         <Route path="invitations" element={<Invitations />}></Route>
-        <Route path="/messages" element={<Messages />} />
+        <Route path="messages" element={<Messages />} />
         {/* right now profile doesnt change the selected items up top */}
-        <Route path="/profile" element={<Profile />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="create">
+          <Route path="" element={<CreateEvent />} />
+          <Route path=":year/:month/:day" element={<CreateEvent />} />
+        </Route>
       </Routes>
     </UserContext.Provider>
   );
