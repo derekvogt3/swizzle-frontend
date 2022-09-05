@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import SelectMenu from "../../common/SelectMenu";
 import SimpleMap from "../../common/SimpleMap";
 import Calendar from "./Calendar";
-import SearchDropDown from "../../common/SearchDropDown";
+import LocationSearchInput from "../../common/LocationSearchInput";
 
 export default function CreateEvent() {
   const params = useParams();
@@ -37,7 +37,7 @@ export default function CreateEvent() {
         <Calendar />
       </div>
       <div>
-        <SearchDropDown />
+        <LocationSearchInput />
       </div>
     </div>
   );

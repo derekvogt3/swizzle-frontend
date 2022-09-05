@@ -4,10 +4,10 @@ import GoogleMapReact from "google-map-react";
 export default function SimpleMap({ lat, lng, h, w }) {
   const defaultProps = {
     center: {
-      lat: 10.99835602,
-      lng: 77.01502627,
+      lat: 40.7128,
+      lng: -74.006,
     },
-    zoom: 11,
+    zoom: 13,
   };
 
   return (
