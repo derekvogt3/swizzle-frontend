@@ -4,33 +4,37 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
 
 const people = [
-  { id: 1, name: "Wade Cooper" },
-  { id: 2, name: "Arlene Mccoy" },
-  { id: 3, name: "Devon Webb" },
-  { id: 4, name: "Tom Cook" },
-  { id: 5, name: "Tanya Fox" },
-  { id: 6, name: "Hellen Schmidt" },
-  { id: 7, name: "Caroline Schultz" },
-  { id: 8, name: "Mason Heaney" },
-  { id: 9, name: "Claudie Smitham" },
-  { id: 10, name: "Emil Schaefer" },
+  { id: 3, name: "3 Attendees" },
+  { id: 4, name: "4 Attendees" },
+  { id: 5, name: "5 Attendees" },
+  { id: 6, name: "6 Attendees" },
+  { id: 7, name: "7 Attendees" },
+  { id: 8, name: "8 Attendees" },
+  { id: 9, name: "9 Attendees" },
+  { id: 10, name: "10 Attendees" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SelectMenu() {
+export default function SelectMenu({ setNumberOfAttendees }) {
   const [selected, setSelected] = useState(people[3]);
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox
+      value={selected}
+      onChange={(e) => {
+        setSelected(e);
+        setNumberOfAttendees(e.id);
+      }}
+    >
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium text-gray-700">
-            Assigned to
+            Number of Attendees
           </Listbox.Label>
-          <div className="relative mt-1">
+          <div className="relative">
             <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
               <span className="block truncate">{selected.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

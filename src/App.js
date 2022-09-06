@@ -15,6 +15,7 @@ import "firebase/compat/auth";
 import CreateEvent from "./page_components/events/CreateEvent";
 
 export const UserContext = React.createContext();
+export const FireTokenContext = React.createContext();
 
 function App({}) {
   const auth = firebase.auth();
@@ -64,18 +65,20 @@ function App({}) {
 
   return (
     <UserContext.Provider value={userObj}>
-      <Navbar setFireToken={setFireToken} auth={auth} />
-      <Routes>
-        <Route path="/" element={<Events />} />
-        <Route path="invitations" element={<Invitations />}></Route>
-        <Route path="messages" element={<Messages />} />
-        {/* right now profile doesnt change the selected items up top */}
-        <Route path="profile" element={<Profile />} />
-        <Route path="create">
-          <Route path="" element={<CreateEvent />} />
-          <Route path=":year/:month/:day" element={<CreateEvent />} />
-        </Route>
-      </Routes>
+      <FireTokenContext.Provider value={fireToken}>
+        <Navbar setFireToken={setFireToken} auth={auth} />
+        <Routes>
+          <Route path="/" element={<Events />} />
+          <Route path="invitations" element={<Invitations />}></Route>
+          <Route path="messages" element={<Messages />} />
+          {/* right now profile doesnt change the selected items up top */}
+          <Route path="profile" element={<Profile />} />
+          <Route path="create">
+            <Route path="" element={<CreateEvent />} />
+            <Route path=":year/:month/:day" element={<CreateEvent />} />
+          </Route>
+        </Routes>
+      </FireTokenContext.Provider>
     </UserContext.Provider>
   );
 }

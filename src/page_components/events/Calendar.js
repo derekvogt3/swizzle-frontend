@@ -21,7 +21,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Calendar() {
+export default function Calendar({ setDate }) {
   const [dateObjectArray, setDateObjectArray] = useState(
     getMonthCalanderData(new Date())
   );
@@ -187,6 +187,7 @@ export default function Calendar() {
                   newDateobj[currentlySelectedIdx].isSelected = false;
                 }
                 newDateobj[dayIdx].isSelected = true;
+                setDate(newDateobj[dayIdx]);
                 setCurrentlySelectedIdx(dayIdx);
                 setDateObjectArray(newDateobj);
               }}

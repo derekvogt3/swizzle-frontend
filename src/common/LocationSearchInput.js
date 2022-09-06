@@ -5,13 +5,16 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import { useState } from "react";
 
-export default function LocationSearchInput() {
+export default function LocationSearchInput({ setLatLng, setLocation }) {
   const [address, setAddress] = useState("");
 
   function handleSelect(address) {
+    setLocation(address);
     geocodeByAddress(address)
       .then((results) => getLatLng(results[0]))
-      .then((latLng) => console.log("Success", latLng))
+      .then((latLng) => {
+        setLatLng(latLng);
+      })
       .catch((error) => console.error("Error", error));
   }
 
@@ -33,7 +36,7 @@ export default function LocationSearchInput() {
               className: "location-search-input",
             })}
           />
-          <div className="autocomplete-dropdown-container">
+          <div className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
             {loading && <div>Loading...</div>}
             {suggestions.map((suggestion) => {
               const className = suggestion.active
@@ -45,6 +48,7 @@ export default function LocationSearchInput() {
                 : { backgroundColor: "#ffffff", cursor: "pointer" };
               return (
                 <div
+                  key={suggestion.placeId}
                   {...getSuggestionItemProps(suggestion, {
                     className,
                     style,
