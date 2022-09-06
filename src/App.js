@@ -13,6 +13,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import CreateEvent from "./page_components/events/CreateEvent";
+import EventDetail from "./page_components/events/EventDetail";
 
 export const UserContext = React.createContext();
 export const FireTokenContext = React.createContext();
@@ -69,6 +70,8 @@ function App({}) {
         <Navbar setFireToken={setFireToken} auth={auth} />
         <Routes>
           <Route path="/" element={<Events />} />
+          <Route path=":eventId" element={<EventDetail />} />
+
           <Route path="invitations" element={<Invitations />}></Route>
           <Route path="messages" element={<Messages />} />
           {/* right now profile doesnt change the selected items up top */}
