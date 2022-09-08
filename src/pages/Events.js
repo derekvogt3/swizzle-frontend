@@ -14,30 +14,12 @@ import { useState } from "react";
 import { FireTokenContext, UserContext } from "../App";
 import { useContext } from "react";
 
-const events = [
-  {
-    id: 1,
-    name: "Super Fun Event",
-    location: "Spring Lounge",
-    location_lat: 1,
-    location_lng: 2,
-    event_datetime: "2020-01-07",
-    applicants: [
-      {
-        first_name: "Dries Vincent",
-        last_name: "dries.vincent@example.com",
-        avatar:
-          "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      },
-    ],
-  },
-];
-
 export default function Events() {
   const [date, setDate] = useState("");
   const [events, setEvents] = useState([]);
   const fireToken = useContext(FireTokenContext);
   const [loading, setLoading] = useState(true);
+  console.log(events);
 
   useEffect(() => {
     if (fireToken) {
@@ -72,32 +54,59 @@ export default function Events() {
                             <p className="truncate font-medium text-swizblue">
                               {event.name}
                             </p>
-                            <p className="ml-1 flex-shrink-0 font-normal text-gray-500">
-                              at {event.location_name}
-                            </p>
-                          </div>
-                          <div className="mt-2 flex">
-                            <div className="flex items-center text-sm text-gray-500">
-                              <CalendarIcon
-                                className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <p>
-                                <time>{event.event_datetime}</time>
-                              </p>
+                            <div className="pl-2 flex">
+                              <div className="flex items-center text-sm text-gray-500">
+                                <CalendarIcon
+                                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                                <p>
+                                  <time>{event.event_datetime}</time>
+                                </p>
+                              </div>
                             </div>
+                          </div>
+                          <div className="flex">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="w-6 h-6 text-gray-400"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+
+                            <p className="flex-shrink-0 font-normal text-gray-500">
+                              {event.location_name}
+                            </p>
                           </div>
                         </div>
                         <div className="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">
                           <div className="flex -space-x-1 overflow-hidden">
-                            {/* {event.applicants.map((applicant) => (
-                              <img
-                                key={applicant.first_name}
-                                className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                                src={applicant.imageUrl}
-                                alt={applicant.name}
-                              />
-                            ))} */}
+                            {event.invitations.map((invitation) =>
+                              invitation.user.avatar ? (
+                                <img
+                                  key={invitation.user.first_name}
+                                  className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                  src={invitation.user.avatar}
+                                  alt={invitation.user.name}
+                                />
+                              ) : (
+                                <span className="inline-block h-6 w-6 overflow-hidden rounded-full bg-gray-100 ring-2 ring-white">
+                                  <svg
+                                    className="h-full w-full text-gray-300"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                  </svg>
+                                </span>
+                              )
+                            )}
                           </div>
                         </div>
                       </div>
