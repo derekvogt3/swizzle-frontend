@@ -37,19 +37,21 @@ export default function Events() {
   const [date, setDate] = useState("");
   const [events, setEvents] = useState([]);
   const fireToken = useContext(FireTokenContext);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/events/", {
-      headers: { Authorization: fireToken },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setEvents(data);
-        // setLoading(false);
-      });
-  }, []);
+    if (fireToken) {
+      fetch("http://localhost:8000/events/", {
+        headers: { Authorization: fireToken },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setEvents(data);
+          setLoading(false);
+        });
+    }
+  }, [fireToken]);
 
   return (
     <div className="p-4">
@@ -62,7 +64,7 @@ export default function Events() {
             {!loading ? (
               events.map((event) => (
                 <li key={event.id}>
-                  <a href="#" className="block hover:bg-gray-50">
+                  <Link to={event.id} className="block hover:bg-gray-50">
                     <div className="flex items-center px-4 py-4 sm:px-6">
                       <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                         <div className="truncate">
@@ -106,7 +108,7 @@ export default function Events() {
                         />
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </li>
               ))
             ) : (

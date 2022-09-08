@@ -8,6 +8,8 @@ export default function Authentication({
   setUserObj,
   user,
   fireToken,
+  inviteAuthentication,
+  setInviteAuthentication,
 }) {
   const [authNav, setAuthNav] = useState(0);
 
@@ -25,6 +27,12 @@ export default function Authentication({
       return (
         <CreateUserProfile setUserObj={setUserObj} fireToken={fireToken} />
       );
+    }
+
+    //this is to allow the user to log in to accept an invitation
+
+    if (inviteAuthentication) {
+      setInviteAuthentication(false);
     }
   }
 

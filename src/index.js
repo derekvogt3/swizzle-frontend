@@ -25,12 +25,5 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <App />
-    <script
-      src={
-        "https://maps.googleapis.com/maps/api/js?key=" +
-        process.env.REACT_APP_GOOGLE_MAP_API +
-        "&libraries=places"
-      }
-    ></script>
   </BrowserRouter>
 );

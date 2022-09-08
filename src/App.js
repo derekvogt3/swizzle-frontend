@@ -6,53 +6,94 @@ import Invitations from "./pages/Invitations";
 import Messages from "./pages/Messages";
 import Profile from "./page_components/profile/Profile";
 import Authentication from "./pages/Authentication";
-import { createContext } from "react";
 import { useEffect } from "react";
-import CreateUserProfile from "./page_components/profile/CreateUserProfile";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import CreateEvent from "./page_components/events/CreateEvent";
 import EventDetail from "./page_components/events/EventDetail";
+import { useLocation } from "react-router-dom";
+import PublicInvite from "./pages/PublicInvite";
 
 export const UserContext = React.createContext();
 export const FireTokenContext = React.createContext();
 
-function App({}) {
+function App() {
   const auth = firebase.auth();
+  const location = useLocation();
 
-  const [loaded, setLoaded] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [loadingUser, setloadingUser] = useState(true);
+
   const [fireToken, setFireToken] = useState("");
   const [user, loading, error] = useAuthState(auth);
   const [userObj, setUserObj] = useState({});
 
-  if (loading) {
-    console.log(loading);
-  }
+  const publicInvite = location.pathname.includes("/publicinvite/");
 
-  if (error) {
-    console.log(error);
-  }
-  console.log(userObj);
+  useEffect(() => {
+    const script = document.createElement("script");
+
+    script.src =
+      "https://maps.googleapis.com/maps/api/js?key=" +
+      process.env.REACT_APP_GOOGLE_MAP_API +
+      "&libraries=places";
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     if (user) {
+      setLoadingProfile(true);
       user.getIdToken(true).then((idToken) => {
         setFireToken(idToken);
       });
     }
   }, [user]);
 
+  //use effect for loading screen
+  useEffect(() => {
+    if (!loading) {
+      setloadingUser(false);
+      if (user) setLoadingProfile(true);
+    }
+  }, [loading]);
+
   useEffect(() => {
     if (fireToken) {
       //check with django
-      fetch("http://localhost:8000/user/current/", {
+
+      fetch(process.env.REACT_APP_BACKEND_URL + "user/current/", {
         headers: { Authorization: fireToken },
       })
         .then((res) => res.json())
-        .then((data) => setUserObj(data));
+        .then((data) => {
+          setUserObj(data);
+
+          setLoadingProfile(false);
+        });
     }
   }, [fireToken]);
+
+  if (publicInvite) {
+    return (
+      <PublicInvite
+        user={user}
+        setUserObj={setUserObj}
+        userObj={userObj}
+        fireToken={fireToken}
+      />
+    );
+  }
+
+  if (loadingUser || loadingProfile) {
+    return <div>Loading</div>;
+  }
 
   if (!user || !userObj.first_name)
     return (
@@ -73,6 +114,7 @@ function App({}) {
           <Route path=":eventId" element={<EventDetail />} />
 
           <Route path="invitations" element={<Invitations />}></Route>
+
           <Route path="messages" element={<Messages />} />
           {/* right now profile doesnt change the selected items up top */}
           <Route path="profile" element={<Profile />} />
