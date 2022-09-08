@@ -4,7 +4,7 @@ export default function Login({ setAuthNav }) {
   return (
     <>
       <div>
-        <img className="h-20 w-auto" src="S_LOGO 2.png" alt="Workflow" />
+        <img className="h-20 w-auto" src="/S_LOGO 2.png" alt="Workflow" />
         <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
           Swizzle
         </h2>

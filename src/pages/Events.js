@@ -19,7 +19,6 @@ export default function Events() {
   const [events, setEvents] = useState([]);
   const fireToken = useContext(FireTokenContext);
   const [loading, setLoading] = useState(true);
-  console.log(events);
 
   useEffect(() => {
     if (fireToken) {
@@ -133,7 +132,6 @@ export default function Events() {
           >
             Create Event
           </Link>
-          <Calendar setDate={setDate} />
         </div>
       </div>
     </div>

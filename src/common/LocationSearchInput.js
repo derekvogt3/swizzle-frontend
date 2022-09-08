@@ -14,6 +14,7 @@ export default function LocationSearchInput({ setLatLng, setLocation }) {
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
         setLatLng(latLng);
+        setAddress("");
       })
       .catch((error) => console.error("Error", error));
   }
@@ -33,10 +34,17 @@ export default function LocationSearchInput({ setLatLng, setLocation }) {
           <input
             {...getInputProps({
               placeholder: "Search Places ...",
-              className: "location-search-input",
+              className:
+                "block w-full rounded-md border-gray-300 pr-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
             })}
           />
-          <div className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+          <div
+            className={
+              address
+                ? "absolute z-30 cursor-default rounded-md border border-gray-300 bg-white py-2 px-3 text-left shadow-sm focus:border-indigo-500 w-96"
+                : ""
+            }
+          >
             {loading && <div>Loading...</div>}
             {suggestions.map((suggestion) => {
               const className = suggestion.active

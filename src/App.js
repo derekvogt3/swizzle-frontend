@@ -32,22 +32,6 @@ function App() {
   const publicInvite = location.pathname.includes("/publicinvite/");
 
   useEffect(() => {
-    const script = document.createElement("script");
-
-    script.src =
-      "https://maps.googleapis.com/maps/api/js?key=" +
-      process.env.REACT_APP_GOOGLE_MAP_API +
-      "&libraries=places";
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
     if (user) {
       setLoadingProfile(true);
       user.getIdToken(true).then((idToken) => {
@@ -118,10 +102,7 @@ function App() {
           <Route path="messages" element={<Messages />} />
           {/* right now profile doesnt change the selected items up top */}
           <Route path="profile" element={<Profile />} />
-          <Route path="create">
-            <Route path="" element={<CreateEvent />} />
-            <Route path=":year/:month/:day" element={<CreateEvent />} />
-          </Route>
+          <Route path="create" element={<CreateEvent />} />
         </Routes>
       </FireTokenContext.Provider>
     </UserContext.Provider>
