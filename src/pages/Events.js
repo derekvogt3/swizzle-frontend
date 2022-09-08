@@ -36,6 +36,15 @@ export default function Events() {
 
   return (
     <div className="p-4">
+      <div className="flex flex-col w-48">
+        <Link
+          to="create"
+          as="button"
+          className="text-center focus:outline-none mb-5 w-full rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow hover:bg-swizpurp-dark focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"
+        >
+          Create New Event
+        </Link>
+      </div>
       <h2 className="text-lg font-semibold text-gray-900 py-2 text-swizblue-dark">
         Upcoming Events
       </h2>
@@ -123,15 +132,6 @@ export default function Events() {
               <div>loading</div>
             )}
           </ul>
-        </div>
-        <div className="flex flex-col">
-          <Link
-            to="create"
-            as="button"
-            className="text-center focus:outline-none mb-5 w-full rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow hover:bg-swizpurp-dark focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"
-          >
-            Create Event
-          </Link>
         </div>
       </div>
     </div>

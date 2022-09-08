@@ -6,13 +6,12 @@ import Avatar from "../../common/Avatar";
 export default function Attendees({ loading, attendees, event }) {
   return (
     <div>
-      <h1 className="font-normal text-gray-500">Attendees</h1>
       <div className="flex flex-col">
         <Disclosure>
           {({ open }) => (
             <>
               <Disclosure.Button>
-                <div className="flex">
+                <div className="flex justify-around">
                   <div className="flex -space-x-4 overflow-hidden items-center">
                     {!loading ? (
                       attendees.map((attentee, index) => {
@@ -21,24 +20,60 @@ export default function Attendees({ loading, attendees, event }) {
                             <Avatar
                               key={attentee.id}
                               image={attentee.user.avatar}
-                              size={"12"}
+                              size={"8"}
+                              className="ring-2 ring-black"
                             />
                           );
                         }
+                        return <></>;
                       })
                     ) : (
                       <div>loading</div>
                     )}
                   </div>
-                  <p className="font-normal text-gray-500">
-                    {!loading
-                      ? attendees.length +
-                        " People out of " +
-                        event.number_of_attendees
-                      : ""}
-                  </p>
+                  <div className="flex">
+                    <div className="flex flex-col items-start">
+                      <p className="font-bold text-gray-500">
+                        {!loading ? attendees.length + " People" : ""}
+                      </p>
+                      <div className="flex">
+                        {!loading ? (
+                          attendees.map((attendee, index) => {
+                            if (index < 2) {
+                              return (
+                                <p
+                                  key={attendee.id}
+                                  className="font-normal text-gray-500"
+                                >
+                                  {attendee.user.first_name + ", "}
+                                </p>
+                              );
+                            }
+
+                            if (index === 2) {
+                              return (
+                                <p
+                                  key={attendee.id}
+                                  className="font-normal text-gray-500"
+                                >
+                                  {attendee.user.first_name + "..."}
+                                </p>
+                              );
+                            }
+                            return <></>;
+                          })
+                        ) : (
+                          <div>loading</div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <ChevronRightIcon
-                    className={open ? "rotate-90 transform w-4 h-4" : "w-4 h-4"}
+                    className={
+                      open
+                        ? "rotate-90 transform w-8 h-8 text-swizblue-light"
+                        : "w-8 h-8 text-swizblue-light"
+                    }
                   />
                 </div>
               </Disclosure.Button>
@@ -52,8 +87,31 @@ export default function Attendees({ loading, attendees, event }) {
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Disclosure.Panel>
-                  Yes! You can purchase a license that you can share with your
-                  entire team.
+                  <div className="pt-2">
+                    {!loading ? (
+                      attendees.map((attendee) => {
+                        return (
+                          <div
+                            key={attendee.id}
+                            className="py-2 flex border-t items-center"
+                          >
+                            <Avatar
+                              key={attendee.id}
+                              image={attendee.user.avatar}
+                              size={"12"}
+                            />
+                            <p className="pl-4 font-normal text-swizblue">
+                              {attendee.user.first_name +
+                                " " +
+                                attendee.user.last_name}{" "}
+                            </p>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div>loading</div>
+                    )}
+                  </div>
                 </Disclosure.Panel>
               </Transition>
             </>

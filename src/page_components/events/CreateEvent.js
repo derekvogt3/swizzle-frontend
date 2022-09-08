@@ -10,7 +10,7 @@ import TimePicker from "react-time-picker";
 import { FireTokenContext, UserContext } from "../../App";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useScript from "react-script-hook/lib/use-script";
+import useScript from "react-script-hook";
 import { useEffect } from "react";
 
 export default function CreateEvent() {
@@ -22,6 +22,8 @@ export default function CreateEvent() {
       process.env.REACT_APP_GOOGLE_MAP_API +
       "&libraries=places",
   });
+
+  console.log(scriptError);
 
   const userObj = useContext(UserContext);
   const fireToken = useContext(FireTokenContext);
@@ -140,14 +142,14 @@ export default function CreateEvent() {
               </div>
             </div>
           </div>
+          <button
+            onClick={() => handleCreateEvent()}
+            className="w-48 my-4 flex w-full justify-center rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizpurp-dark focus:outline-none focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"
+          >
+            Create Event
+          </button>
         </div>
       </div>
-      <button
-        onClick={() => handleCreateEvent()}
-        className="flex w-full justify-center rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizpurp-dark focus:outline-none focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"
-      >
-        Create Event
-      </button>
     </div>
   );
 }

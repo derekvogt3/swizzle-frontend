@@ -6,6 +6,7 @@ import { FireTokenContext } from "../../App";
 import { useState } from "react";
 import SimpleMap from "../../common/SimpleMap";
 import { CalendarIcon } from "@heroicons/react/solid";
+import CurrentInvitation from "./CurrentInvitation";
 
 import Attendees from "./Attendees";
 
@@ -64,8 +65,14 @@ export default function EventDetail() {
             w={"100%"}
           ></SimpleMap>
           <div className="flex flex-col p-4">
-            <div className="flex">
+            <div className="flex justify-between">
               <p className="text-xl font-bold text-swizblue">{event.name}</p>
+              <button
+                type="button"
+                className="inline-flex items-center rounded-md border border-transparent bg-swizblue-vlight text-swizblue-dark px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-swizblue-light focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Messages
+              </button>
             </div>
             <div className="flex items-center mt-4">
               <CalendarIcon
@@ -78,7 +85,7 @@ export default function EventDetail() {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2 items-start">
           <div className="grow bg-white shadow rounded-lg flex flex-col p-4">
             <Attendees
               loading={loading}
@@ -87,9 +94,11 @@ export default function EventDetail() {
             />
           </div>
           <div className="grow bg-white shadow rounded-lg flex flex-col p-4">
-            <div>
-              <h1>Invitationsadkfjaskldjfas ldfasdfdf</h1>
-            </div>
+            <CurrentInvitation
+              loading={loading}
+              attendees={attendeesToInclude}
+              event={event}
+            />
           </div>{" "}
         </div>
       </div>
