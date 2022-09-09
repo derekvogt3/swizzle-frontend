@@ -47,7 +47,7 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
   return (
     <div className="space-y-2" action="#" method="POST">
       <div>
-        <img className="h-20 w-auto" src="S_LOGO 2.png" alt="Workflow" />
+        <img className="h-20 w-auto" src="/S_LOGO 2.png" alt="Workflow" />
         <h2 className="mt-2 mb-4 text-3xl font-bold tracking-tight text-gray-900">
           Swizzle
         </h2>

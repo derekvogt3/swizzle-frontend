@@ -19,6 +19,7 @@ export default function Events() {
   const [events, setEvents] = useState([]);
   const fireToken = useContext(FireTokenContext);
   const [loading, setLoading] = useState(true);
+  console.log(fireToken);
 
   useEffect(() => {
     if (fireToken) {
@@ -98,13 +99,16 @@ export default function Events() {
                             {event.invitations.map((invitation) =>
                               invitation.user.avatar ? (
                                 <img
-                                  key={invitation.user.first_name}
+                                  key={invitation.id}
                                   className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
                                   src={invitation.user.avatar}
                                   alt={invitation.user.name}
                                 />
                               ) : (
-                                <span className="inline-block h-6 w-6 overflow-hidden rounded-full bg-gray-100 ring-2 ring-white">
+                                <span
+                                  key={invitation.id}
+                                  className="inline-block h-6 w-6 overflow-hidden rounded-full bg-gray-100 ring-2 ring-white"
+                                >
                                   <svg
                                     className="h-full w-full text-gray-300"
                                     fill="currentColor"

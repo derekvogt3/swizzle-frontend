@@ -14,6 +14,7 @@ import CreateEvent from "./page_components/events/CreateEvent";
 import EventDetail from "./page_components/events/EventDetail";
 import { useLocation } from "react-router-dom";
 import PublicInvite from "./pages/PublicInvite";
+import MessageDetail from "./page_components/messages/MessageDetail";
 
 export const UserContext = React.createContext();
 export const FireTokenContext = React.createContext();
@@ -99,7 +100,10 @@ function App() {
 
           <Route path="invitations" element={<Invitations />}></Route>
 
-          <Route path="messages" element={<Messages />} />
+          <Route path="messages">
+            <Route path="" element={<Messages />} />
+            <Route path=":eventId" element={<MessageDetail />} />
+          </Route>
           {/* right now profile doesnt change the selected items up top */}
           <Route path="profile" element={<Profile />} />
           <Route path="create" element={<CreateEvent />} />
