@@ -1,11 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
-import { FireTokenContext, UserContext } from "../App";
-import { useContext } from "react";
 
 export default function Messages() {
-  const fireToken = useContext(FireTokenContext);
-
   useEffect(() => {
     document.querySelector("#room-name-input").focus();
     document.querySelector("#room-name-input").onkeyup = function (e) {
