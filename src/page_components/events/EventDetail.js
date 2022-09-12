@@ -7,6 +7,7 @@ import { useState } from "react";
 import SimpleMap from "../../common/SimpleMap";
 import { CalendarIcon } from "@heroicons/react/solid";
 import CurrentInvitation from "./CurrentInvitation";
+import { Link } from "react-router-dom";
 
 import Attendees from "./Attendees";
 
@@ -15,8 +16,26 @@ export default function EventDetail() {
   const params = useParams();
   const [event, setEvent] = useState({});
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState({});
+  console.log(message);
 
   useEffect(() => {
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        "chat/messages/" +
+        params.eventId +
+        "/",
+      {
+        headers: { Authorization: fireToken },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.length !== 0) {
+          setMessage(data[data.length - 1]);
+        }
+      });
+
     fetch(
       process.env.REACT_APP_BACKEND_URL + "events/" + params.eventId + "/",
       {
@@ -67,12 +86,18 @@ export default function EventDetail() {
           <div className="flex flex-col p-4">
             <div className="flex justify-between">
               <p className="text-xl font-bold text-swizblue">{event.name}</p>
-              <button
-                type="button"
-                className="inline-flex items-center rounded-md border border-transparent bg-swizblue-vlight text-swizblue-dark px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-swizblue-light focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              <Link
+                to={"/messages/" + params.eventId}
+                className="w-60 bg-white shadow rounded-lg flex w-full hover:bg-gray-200"
               >
-                Messages
-              </button>
+                {JSON.stringify(message) === "{}" ? (
+                  <>
+                    <p>No messages in chat</p>
+                  </>
+                ) : (
+                  <p>{message.message_text}</p>
+                )}
+              </Link>
             </div>
             <div className="flex items-center mt-4">
               <CalendarIcon

@@ -1,4 +1,5 @@
 import React from "react";
+import { SpringCarousel } from "./SpringCarousel";
 
 export default function Login({ setAuthNav }) {
   return (
@@ -13,9 +14,7 @@ export default function Login({ setAuthNav }) {
       <div className="mt-8">
         <div>
           <div>
-            <p className="text-medium font-medium text-gray-700">
-              put a carosel here explaining the product
-            </p>
+            <SpringCarousel />
           </div>
 
           <div className="relative mt-6">

@@ -15,6 +15,7 @@ import EventDetail from "./page_components/events/EventDetail";
 import { useLocation } from "react-router-dom";
 import PublicInvite from "./pages/PublicInvite";
 import MessageDetail from "./page_components/messages/MessageDetail";
+import Loading from "./common/Loading";
 
 export const UserContext = React.createContext();
 export const FireTokenContext = React.createContext();
@@ -77,7 +78,7 @@ function App() {
   }
 
   if (loadingUser || loadingProfile) {
-    return <div>Loading</div>;
+    return <Loading />;
   }
 
   if (!user || !userObj.first_name)

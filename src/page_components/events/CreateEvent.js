@@ -23,13 +23,13 @@ export default function CreateEvent() {
       "&libraries=places",
   });
 
-  console.log(scriptError);
-
   const userObj = useContext(UserContext);
   const fireToken = useContext(FireTokenContext);
   const [date, setDate] = useState(setDateFromParams());
 
-  const [time, setTime] = useState("10:00");
+  const [hour, setHour] = useState("7");
+  const [minute, setMinute] = useState("30");
+  const [ampm, setAmpm] = useState("PM");
 
   const [eventName, setEventName] = useState("");
   const [location, setLocation] = useState("");
@@ -43,9 +43,22 @@ export default function CreateEvent() {
     return "";
   }
 
-  console.log(date);
+  function convertTime() {
+    let formattedHour = hour;
+
+    if (ampm === "PM") {
+      formattedHour = (parseInt(hour) + 12).toString();
+    }
+
+    if (formattedHour.length === 1) {
+      formattedHour = "0" + formattedHour;
+    }
+
+    return formattedHour + ":" + minute;
+  }
 
   function handleCreateEvent() {
+    const time = hour + ":" + minute;
     const obj = {
       name: eventName,
       admin_id: userObj.id,
@@ -55,7 +68,10 @@ export default function CreateEvent() {
       location_lng: latLng.lng,
       number_of_attendees: numberOfAttendees,
       event_datetime:
-        date.date.toISOString().substring(0, 10) + "T" + time + ":00.000Z",
+        date.date.toISOString().substring(0, 10) +
+        "T" +
+        convertTime() +
+        ":00.000Z",
     };
 
     fetch("http://localhost:8000/events/", {
@@ -75,6 +91,9 @@ export default function CreateEvent() {
 
   return (
     <div className="p-2 flex flex-col">
+      <div className="flex justify-center p-2">
+        <p className="text-xl text-gray-600">Create New Event</p>
+      </div>
       <div className="flex flex-wrap justify-around">
         <div className="flex">
           <div className="w-96 p-2">
@@ -135,19 +154,66 @@ export default function CreateEvent() {
             <SelectMenu setNumberOfAttendees={setNumberOfAttendees} />
           </div>
           <div className="flex justify-around">
-            <div>
+            <div className="py-4">
               <Calendar setDate={setDate} externalSelectedDate={date} />
               <div>
-                <TimePicker onChange={setTime} value={time} />
+                <div className="flex justify-center py-4">
+                  <div className="mt-2 p-3 bg-white rounded-lg border">
+                    <div className="flex">
+                      <select
+                        name="hours"
+                        className="bg-transparent text-l appearance-none outline-none rounded"
+                        value={hour}
+                        onChange={(e) => setHour(e.target.value)}
+                      >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">10</option>
+                        <option value="12">12</option>
+                      </select>
+                      <span className="text-xl mr-3">:</span>
+                      <select
+                        name="minutes"
+                        className="bg-transparent text-l appearance-none outline-none mr-4 rounded"
+                        value={minute}
+                        onChange={(e) => setMinute(e.target.value)}
+                      >
+                        <option value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                      </select>
+                      <select
+                        name="ampm"
+                        className="bg-transparent text-l appearance-none outline-none rounded"
+                        value={ampm}
+                        onChange={(e) => setAmpm(e.target.value)}
+                      >
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <button
-            onClick={() => handleCreateEvent()}
-            className="w-48 my-4 flex w-full justify-center rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizpurp-dark focus:outline-none focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"
-          >
-            Create Event
-          </button>
+          <div className="flex justify-center">
+            <button
+              onClick={() => handleCreateEvent()}
+              className=" flex w-full justify-center rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizpurp-dark focus:outline-none focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"
+            >
+              Create Event
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,227 +1,145 @@
-import React from "react";
+import { Fragment } from "react";
+import {
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DotsHorizontalIcon,
+  LocationMarkerIcon,
+} from "@heroicons/react/solid";
+import { Menu, Transition } from "@headlessui/react";
 import { useEffect } from "react";
+import Calendar from "../page_components/events/Calendar";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { FireTokenContext, UserContext } from "../App";
+import { useContext } from "react";
 
-export default function Messages() {
+export default function Events() {
+  const [date, setDate] = useState("");
+  const [events, setEvents] = useState([]);
+  const fireToken = useContext(FireTokenContext);
+  const [loading, setLoading] = useState(true);
+  console.log(fireToken);
+
   useEffect(() => {
-    document.querySelector("#room-name-input").focus();
-    document.querySelector("#room-name-input").onkeyup = function (e) {
-      if (e.keyCode === 13) {
-        // enter, return
-        document.querySelector("#room-name-submit").click();
-      }
-    };
+    if (fireToken) {
+      fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
+        headers: { Authorization: fireToken },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setEvents(data);
+          setLoading(false);
+        });
+    }
+  }, [fireToken]);
 
-    document.querySelector("#room-name-submit").onclick = function (e) {
-      var roomName = document.querySelector("#room-name-input").value;
-      window.location.pathname = "/messages/" + roomName + "/";
-    };
-  }, []);
   return (
-    <div>
-      <p>What chat room would you like to enter?</p>
-      <input id="room-name-input" type="text" size="100" />
-      <input id="room-name-submit" type="button" value="Enter" />
+    <div className="p-4">
+      <div className="flex flex-col w-48"></div>
+      <h2 className="text-lg font-semibold text-gray-900 py-2 text-swizblue-dark">
+        Event Chats
+      </h2>
+      <div className="flex gap-4 flex-wrap justify-center items-start">
+        <div className="overflow-hidden grow bg-white shadow sm:rounded-md">
+          <ul role="list" className="divide-y divide-gray-200">
+            {!loading ? (
+              events.map((event) => (
+                <li key={event.id}>
+                  <Link to={event.id} className="block hover:bg-gray-50">
+                    <div className="flex items-center px-4 py-4 sm:px-6">
+                      <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                        <div className="truncate">
+                          <div className="flex text-sm">
+                            <p className="truncate font-medium text-swizblue">
+                              {event.name}
+                            </p>
+                            <div className="pl-2 flex">
+                              <div className="flex items-center text-sm text-gray-500">
+                                <CalendarIcon
+                                  className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                                <p>
+                                  <time>
+                                    {new Date(
+                                      event.event_datetime
+                                    ).toLocaleDateString("en-us", {
+                                      year: "numeric",
+                                      month: "short",
+                                      day: "numeric",
+                                      hour: "numeric",
+                                      minute: "numeric",
+                                    })}
+                                  </time>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="w-6 h-6 text-gray-400"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+
+                            <p className="flex-shrink-0 font-normal text-gray-500">
+                              {event.location_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex-shrink-0 sm:mt-0 sm:ml-5">
+                          <div className="flex -space-x-1 overflow-hidden">
+                            {event.invitations.map((invitation) =>
+                              invitation.user.avatar ? (
+                                <img
+                                  key={invitation.id}
+                                  className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                  src={invitation.user.avatar}
+                                  alt={invitation.user.name}
+                                />
+                              ) : (
+                                <span
+                                  key={invitation.id}
+                                  className="inline-block h-6 w-6 overflow-hidden rounded-full bg-gray-100 ring-2 ring-white"
+                                >
+                                  <svg
+                                    className="h-full w-full text-gray-300"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                  </svg>
+                                </span>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="ml-5 flex-shrink-0">
+                        <ChevronRightIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <div>loading</div>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
-
-    // <div className="h-full flex-auto">
-    //   <div class="h-full min-w-full border rounded lg:grid lg:grid-cols-3">
-    //     <div class="border-r border-gray-300 lg:col-span-1">
-    //       <div class="mx-3 my-3">
-    //         <div class="relative text-gray-600">
-    //           <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-    //             <svg
-    //               fill="none"
-    //               stroke="currentColor"
-    //               stroke-linecap="round"
-    //               stroke-linejoin="round"
-    //               stroke-width="2"
-    //               viewBox="0 0 24 24"
-    //               class="w-6 h-6 text-gray-300"
-    //             >
-    //               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-    //             </svg>
-    //           </span>
-    //           <input
-    //             type="search"
-    //             class="block w-full py-2 pl-10 bg-gray-100 rounded outline-none"
-    //             name="search"
-    //             placeholder="Search"
-    //             required
-    //           />
-    //         </div>
-    //       </div>
-
-    //       <ul class="overflow-auto h-[32rem]">
-    //         <h2 class="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
-    //         <li>
-    //           <a class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
-    //             <img
-    //               class="object-cover w-10 h-10 rounded-full"
-    //               src="https://cdn.pixabay.com/photo/2018/09/12/12/14/man-3672010__340.jpg"
-    //               alt="username"
-    //             />
-    //             <div class="w-full pb-2">
-    //               <div class="flex justify-between">
-    //                 <span class="block ml-2 font-semibold text-gray-600">
-    //                   Jhon Don
-    //                 </span>
-    //                 <span class="block ml-2 text-sm text-gray-600">
-    //                   25 minutes
-    //                 </span>
-    //               </div>
-    //               <span class="block ml-2 text-sm text-gray-600">bye</span>
-    //             </div>
-    //           </a>
-    //           <a class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out bg-gray-100 border-b border-gray-300 cursor-pointer focus:outline-none">
-    //             <img
-    //               class="object-cover w-10 h-10 rounded-full"
-    //               src="https://cdn.pixabay.com/photo/2016/06/15/15/25/loudspeaker-1459128__340.png"
-    //               alt="username"
-    //             />
-    //             <div class="w-full pb-2">
-    //               <div class="flex justify-between">
-    //                 <span class="block ml-2 font-semibold text-gray-600">
-    //                   Same
-    //                 </span>
-    //                 <span class="block ml-2 text-sm text-gray-600">
-    //                   50 minutes
-    //                 </span>
-    //               </div>
-    //               <span class="block ml-2 text-sm text-gray-600">
-    //                 Good night
-    //               </span>
-    //             </div>
-    //           </a>
-    //           <a class="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
-    //             <img
-    //               class="object-cover w-10 h-10 rounded-full"
-    //               src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg"
-    //               alt="username"
-    //             />
-    //             <div class="w-full pb-2">
-    //               <div class="flex justify-between">
-    //                 <span class="block ml-2 font-semibold text-gray-600">
-    //                   Emma
-    //                 </span>
-    //                 <span class="block ml-2 text-sm text-gray-600">6 hour</span>
-    //               </div>
-    //               <span class="block ml-2 text-sm text-gray-600">
-    //                 Good Morning
-    //               </span>
-    //             </div>
-    //           </a>
-    //         </li>
-    //       </ul>
-    //     </div>
-    //     <div class="hidden lg:col-span-2 lg:block">
-    //       <div class="w-full">
-    //         <div class="relative flex items-center p-3 border-b border-gray-300">
-    //           <img
-    //             class="object-cover w-10 h-10 rounded-full"
-    //             src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg"
-    //             alt="username"
-    //           />
-    //           <span class="block ml-2 font-bold text-gray-600">Emma</span>
-    //           <span class="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
-    //         </div>
-    //         <div class="relative w-full p-6 overflow-y-auto h-[40rem]">
-    //           <ul class="space-y-2">
-    //             <li class="flex justify-start">
-    //               <div class="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
-    //                 <span class="block">Hi</span>
-    //               </div>
-    //             </li>
-    //             <li class="flex justify-end">
-    //               <div class="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow">
-    //                 <span class="block">Hiiii</span>
-    //               </div>
-    //             </li>
-    //             <li class="flex justify-end">
-    //               <div class="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow">
-    //                 <span class="block">how are you?</span>
-    //               </div>
-    //             </li>
-    //             <li class="flex justify-start">
-    //               <div class="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
-    //                 <span class="block">
-    //                   Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-    //                 </span>
-    //               </div>
-    //             </li>
-    //           </ul>
-    //         </div>
-
-    //         <div class="flex items-center justify-between w-full p-3 border-t border-gray-300">
-    //           <button>
-    //             <svg
-    //               xmlns="http://www.w3.org/2000/svg"
-    //               class="w-6 h-6 text-gray-500"
-    //               fill="none"
-    //               viewBox="0 0 24 24"
-    //               stroke="currentColor"
-    //             >
-    //               <path
-    //                 stroke-linecap="round"
-    //                 stroke-linejoin="round"
-    //                 stroke-width="2"
-    //                 d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-    //               />
-    //             </svg>
-    //           </button>
-    //           <button>
-    //             <svg
-    //               xmlns="http://www.w3.org/2000/svg"
-    //               class="w-5 h-5 text-gray-500"
-    //               fill="none"
-    //               viewBox="0 0 24 24"
-    //               stroke="currentColor"
-    //             >
-    //               <path
-    //                 stroke-linecap="round"
-    //                 stroke-linejoin="round"
-    //                 stroke-width="2"
-    //                 d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-    //               />
-    //             </svg>
-    //           </button>
-
-    //           <input
-    //             type="text"
-    //             placeholder="Message"
-    //             class="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-    //             name="message"
-    //             required
-    //           />
-    //           <button>
-    //             <svg
-    //               xmlns="http://www.w3.org/2000/svg"
-    //               class="w-5 h-5 text-gray-500"
-    //               fill="none"
-    //               viewBox="0 0 24 24"
-    //               stroke="currentColor"
-    //             >
-    //               <path
-    //                 stroke-linecap="round"
-    //                 stroke-linejoin="round"
-    //                 stroke-width="2"
-    //                 d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-    //               />
-    //             </svg>
-    //           </button>
-    //           <button type="submit">
-    //             <svg
-    //               class="w-5 h-5 text-gray-500 origin-center transform rotate-90"
-    //               xmlns="http://www.w3.org/2000/svg"
-    //               viewBox="0 0 20 20"
-    //               fill="currentColor"
-    //             >
-    //               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-    //             </svg>
-    //           </button>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>{" "}
-    // </div>
   );
 }

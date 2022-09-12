@@ -11,17 +11,20 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
   const [show, setshow] = useState(false);
   const [final, setfinal] = useState("");
   const [showCaptia, setShowCaptia] = useState(false);
+  const [countryCode, setCountryCode] = useState("+1");
 
   const signIn = () => {
     const auth = firebase.auth();
     firebase.auth().useDeviceLanguage();
     console.log(auth);
 
-    if (number === "" || number.length < 10) return;
+    if (number === "" || number.length < 10 || number.length > 10) return;
+
+    const formattedNumber = countryCode + number;
 
     let verify = new firebase.auth.RecaptchaVerifier("recaptcha-container");
     auth
-      .signInWithPhoneNumber(number, verify)
+      .signInWithPhoneNumber(formattedNumber, verify)
       .then((result) => {
         setfinal(result);
         setshow(true);
@@ -68,7 +71,6 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
                 >
                   <option>US</option>
                   <option>CA</option>
-                  <option>EU</option>
                 </select>
               </div>
               <input
@@ -76,16 +78,15 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
                 name="phone-number"
                 id="phone-number"
                 className="block w-full rounded-md border-gray-300 pl-16 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="+1 (555) 987-6543"
+                placeholder="(555) 987-6543"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
               />
             </div>
           </div>
           <div className="py-6">
-            <div id="recaptcha-container" className="justify-center flex"></div>
             {showCaptia ? (
-              <></>
+              <div className="h-10"></div>
             ) : (
               <button
                 id="sign-in-button"
@@ -94,12 +95,16 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
                   setShowCaptia(true);
                   signIn();
                 }}
-                className="flex w-full justify-center rounded-md border border-transparent bg-swizblue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizblue-dark focus:outline-none focus:ring-2 focus:ring-swizblue-light focus:ring-offset-2"
+                className="flex w-full h-10 justify-center rounded-md border border-transparent bg-swizblue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizblue-dark focus:outline-none focus:ring-2 focus:ring-swizblue-light focus:ring-offset-2"
               >
                 Confirm
               </button>
             )}
           </div>
+          <div
+            id="recaptcha-container"
+            className="flex justify-center h-24"
+          ></div>
         </div>
       ) : (
         <div>

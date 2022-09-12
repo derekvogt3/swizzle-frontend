@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FireTokenContext, UserContext } from "../App";
 import { useContext } from "react";
+import Loading from "../common/Loading";
 
 export default function Events() {
   const [date, setDate] = useState("");
@@ -23,7 +24,7 @@ export default function Events() {
 
   useEffect(() => {
     if (fireToken) {
-      fetch("http://localhost:8000/events/", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
         headers: { Authorization: fireToken },
       })
         .then((res) => res.json())
@@ -50,6 +51,35 @@ export default function Events() {
         Upcoming Events
       </h2>
       <div className="flex gap-4 flex-wrap justify-center items-start">
+        {!loading && events.length === 0 ? (
+          <div className="grow flex justify-center">
+            <div className="text-center">
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 48 48"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M34 40h10v-4a6 6 0 00-10.712-3.714M34 40H14m20 0v-4a9.971 9.971 0 00-.712-3.714M14 40H4v-4a6 6 0 0110.713-3.714M14 40v-4c0-1.313.253-2.566.713-3.714m0 0A10.003 10.003 0 0124 26c4.21 0 7.813 2.602 9.288 6.286M30 14a6 6 0 11-12 0 6 6 0 0112 0zm12 6a4 4 0 11-8 0 4 4 0 018 0zm-28 0a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              <h2 className="mt-2 text-lg font-medium text-gray-900">
+                Host Event or Accept Invitation
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                You currently do not belong to any events, create an event or
+                accept an invitation to begin.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="overflow-hidden grow bg-white shadow sm:rounded-md">
           <ul role="list" className="divide-y divide-gray-200">
             {!loading ? (
@@ -70,7 +100,17 @@ export default function Events() {
                                   aria-hidden="true"
                                 />
                                 <p>
-                                  <time>{event.event_datetime}</time>
+                                  <time>
+                                    {new Date(
+                                      event.event_datetime
+                                    ).toLocaleDateString("en-us", {
+                                      year: "numeric",
+                                      month: "short",
+                                      day: "numeric",
+                                      hour: "numeric",
+                                      minute: "numeric",
+                                    })}
+                                  </time>
                                 </p>
                               </div>
                             </div>
@@ -133,7 +173,7 @@ export default function Events() {
                 </li>
               ))
             ) : (
-              <div>loading</div>
+              <Loading />
             )}
           </ul>
         </div>

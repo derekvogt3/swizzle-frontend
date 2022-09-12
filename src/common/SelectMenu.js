@@ -31,7 +31,7 @@ export default function SelectMenu({ setNumberOfAttendees }) {
     >
       {({ open }) => (
         <>
-          <Listbox.Label className="block text-sm font-medium text-gray-700">
+          <Listbox.Label className="block text-sm font-medium text-gray-700 p-2">
             Number of Attendees
           </Listbox.Label>
           <div className="relative">
