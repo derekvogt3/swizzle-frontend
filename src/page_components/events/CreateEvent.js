@@ -35,6 +35,7 @@ export default function CreateEvent() {
   const [location, setLocation] = useState("");
   const [latLng, setLatLng] = useState(null);
   const [numberOfAttendees, setNumberOfAttendees] = useState(6);
+  const [description, setDescription] = useState("");
 
   function setDateFromParams() {
     if (params.year && params.month && params.day) {
@@ -67,6 +68,7 @@ export default function CreateEvent() {
       location_lat: latLng.lat,
       location_lng: latLng.lng,
       number_of_attendees: numberOfAttendees,
+      description: description,
       event_datetime:
         date.date.toISOString().substring(0, 10) +
         "T" +
@@ -206,7 +208,28 @@ export default function CreateEvent() {
               </div>
             </div>
           </div>
-          <div className="flex justify-center">
+          <div>
+            <label
+              htmlFor="about"
+              className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+            >
+              Event Description
+            </label>
+            <div className="mt-1 sm:col-span-2 sm:mt-0">
+              <textarea
+                id="about"
+                name="about"
+                rows={3}
+                className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-swizpurp focus:ring-swizpurp sm:text-sm"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <p className="mt-2 text-sm text-gray-500">
+                Provide any other details you'd like to include.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center py-4">
             <button
               onClick={() => handleCreateEvent()}
               className=" flex w-full justify-center rounded-md border border-transparent bg-swizpurp py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizpurp-dark focus:outline-none focus:ring-2 focus:ring-swizpurp-light focus:ring-offset-2"

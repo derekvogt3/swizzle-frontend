@@ -4,6 +4,31 @@ import { ChevronRightIcon } from "@heroicons/react/outline";
 import Avatar from "../../common/Avatar";
 
 export default function Attendees({ loading, attendees, event }) {
+  let attendeesString = "";
+
+  function getAttendeesString() {
+    if (!loading) {
+      attendees.forEach((attendee, index) => {
+        if (index === 0) {
+          attendeesString = attendee.user.first_name;
+        }
+
+        if (index === 1 && attendees.length === 2) {
+          attendeesString =
+            attendeesString + " and " + attendee.user.first_name;
+        } else if (index === 1) {
+          attendeesString = attendeesString + ", " + attendee.user.first_name;
+        }
+
+        if (index === 2) {
+          attendeesString =
+            attendeesString + ", " + attendee.user.first_name + "...";
+        }
+      });
+    }
+  }
+  getAttendeesString();
+
   return (
     <div>
       <div className="flex flex-col">
@@ -11,7 +36,7 @@ export default function Attendees({ loading, attendees, event }) {
           {({ open }) => (
             <>
               <Disclosure.Button>
-                <div className="flex justify-around">
+                <div className="flex justify-between p-2">
                   <div className="flex -space-x-4 overflow-hidden items-center">
                     {!loading ? (
                       attendees.map((attentee, index) => {
@@ -34,37 +59,12 @@ export default function Attendees({ loading, attendees, event }) {
                   <div className="flex">
                     <div className="flex flex-col items-start">
                       <p className="font-bold text-gray-500">
-                        {!loading ? attendees.length + " People" : ""}
+                        {!loading ? attendees.length + " People Attending" : ""}
                       </p>
                       <div className="flex">
-                        {!loading ? (
-                          attendees.map((attendee, index) => {
-                            if (index < 2) {
-                              return (
-                                <p
-                                  key={attendee.id}
-                                  className="font-normal text-gray-500"
-                                >
-                                  {attendee.user.first_name + ", "}
-                                </p>
-                              );
-                            }
-
-                            if (index === 2) {
-                              return (
-                                <p
-                                  key={attendee.id}
-                                  className="font-normal text-gray-500"
-                                >
-                                  {attendee.user.first_name + "..."}
-                                </p>
-                              );
-                            }
-                            return <></>;
-                          })
-                        ) : (
-                          <div>loading</div>
-                        )}
+                        <p className="font-normal text-gray-500">
+                          {attendeesString}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -100,7 +100,7 @@ export default function Attendees({ loading, attendees, event }) {
                               image={attendee.user.avatar}
                               size={"12"}
                             />
-                            <p className="pl-4 font-normal text-swizblue">
+                            <p className="pl-4 font-normal text-gray-500">
                               {attendee.user.first_name +
                                 " " +
                                 attendee.user.last_name}{" "}

@@ -37,7 +37,7 @@ export function SpringCarousel() {
             className="bg-white shadow rounded-lg flex flex-col items-center w-full m-2"
           >
             <img src={i.image} className="h-32 w-32"></img>
-            <p className="p-2 text-center text-gray-700">{i.text}</p>
+            <p className="p-2 text-center text-gray-600">{i.text}</p>
           </div>
         ),
       })),
@@ -47,7 +47,7 @@ export function SpringCarousel() {
     <div>
       <div className="overflow-hidden">{carouselFragment}</div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between p-2">
         {itemsIdx === 0 ? (
           <div className="w-8 h-8"></div>
         ) : (

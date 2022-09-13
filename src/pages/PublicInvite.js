@@ -105,11 +105,17 @@ export default function PublicInvite({ userObj, setUserObj, user, fireToken }) {
               <div className="flex flex-col p-2">
                 <p className="text-xl font-bold text-swizpurp">{event.name}</p>
                 {user ? (
-                  <button onClick={() => handleAcceptLoggedInUser()}>
+                  <button
+                    className="flex w-full justify-center rounded-md border border-transparent bg-swizblue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizblue-dark focus:outline-none focus:ring-2 focus:ring-swizblue-light focus:ring-offset-2"
+                    onClick={() => handleAcceptLoggedInUser()}
+                  >
                     Accept Invitation
                   </button>
                 ) : (
-                  <button onClick={() => handleAcceptNotLoggedInUser()}>
+                  <button
+                    className="flex w-full justify-center rounded-md border border-transparent bg-swizblue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizblue-dark focus:outline-none focus:ring-2 focus:ring-swizblue-light focus:ring-offset-2"
+                    onClick={() => handleAcceptNotLoggedInUser()}
+                  >
                     Login to Accept Invitation
                   </button>
                 )}
