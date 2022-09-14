@@ -24,10 +24,10 @@
   },
   "scripts": {
     "start": "serve -s build",
-    "build": "npm install && npm run build ",
+    "build": "react-scripts build",
     "clean": "rm -rf public",
     "deploy": "cp -a /build/. public/",
-    "heroku-postbuild": "npm run clean && npm run build && npm run deploy"
+    "heroku-postbuild": "npm install && npm run clean && npm run build && npm run deploy"
   },
   "eslintConfig": {
     "extends": [
