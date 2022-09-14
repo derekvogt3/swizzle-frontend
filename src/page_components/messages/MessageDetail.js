@@ -18,15 +18,6 @@ export default function MessageDetail() {
   const webSocket = useRef(null);
   const divRef = useRef(null);
 
-  //   async function initiateChat() {
-  //     const res = await fetch(
-  //       process.env.REACT_APP_BACKEND_URL +
-  //         "chat/messages/" +
-  //         params.eventId +
-  //         "/"
-  //     );
-  //   }
-
   useEffect(() => {
     webSocket.current = new WebSocket(
       "ws://localhost:8000/ws/chat/" + params.eventId + "/?token=" + fireToken
@@ -88,8 +79,6 @@ export default function MessageDetail() {
     }
   }
 
-  console.log(event);
-
   return (
     <>
       <div className="flex-none flex justify-center mt-2">
@@ -145,7 +134,7 @@ export default function MessageDetail() {
               return (
                 <div>
                   <div key={message.id} className="flex justify-end">
-                    <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow mx-4 mb-1">
+                    <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow mx-4 my-2">
                       <span className="block">{message.message_text}</span>
                     </div>
                   </div>

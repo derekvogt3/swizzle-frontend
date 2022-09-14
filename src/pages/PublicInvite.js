@@ -66,7 +66,6 @@ export default function PublicInvite({ userObj, setUserObj, user, fireToken }) {
       .then((res) => res.json())
       .then((data) => {
         setOpen(true);
-        console.log(data);
       });
   }
   function handleDeclineLoggedInUser() {}
@@ -85,7 +84,6 @@ export default function PublicInvite({ userObj, setUserObj, user, fireToken }) {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (
           data.invitations.find(
             (invitation) => invitation.id === location.pathname.split("/")[2]

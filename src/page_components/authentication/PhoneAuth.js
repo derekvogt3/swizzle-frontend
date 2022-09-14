@@ -16,7 +16,6 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
   const signIn = () => {
     const auth = firebase.auth();
     firebase.auth().useDeviceLanguage();
-    console.log(auth);
 
     if (number === "" || number.length < 10 || number.length > 10) return;
 

@@ -20,7 +20,6 @@ export default function Events() {
   const [events, setEvents] = useState([]);
   const fireToken = useContext(FireTokenContext);
   const [loading, setLoading] = useState(true);
-  console.log(fireToken);
 
   useEffect(() => {
     if (fireToken) {
@@ -29,7 +28,6 @@ export default function Events() {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setEvents(data);
           setLoading(false);
         });

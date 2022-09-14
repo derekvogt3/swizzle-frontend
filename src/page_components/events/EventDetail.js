@@ -18,7 +18,6 @@ export default function EventDetail() {
   const [event, setEvent] = useState({});
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({});
-  console.log(message);
 
   useEffect(() => {
     fetch(
@@ -45,7 +44,6 @@ export default function EventDetail() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(event);
         setEvent(data);
         setLoading(false);
       });
@@ -93,7 +91,6 @@ export default function EventDetail() {
     }
     return "";
   }
-  console.log(getMostRecentMessageUser());
 
   return (
     <div className="flex flex-col items-center m-2">
@@ -121,14 +118,12 @@ export default function EventDetail() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <p className="flex-shrink-0 font-normal text-gray-500">
-                  {event.location_name}
-                </p>
+                <p className="text-gray-600">{event.location_name}</p>
               </div>
             </div>
             <Link
               to={"/messages/" + params.eventId}
-              className="relative w-60 bg-white shadow border rounded-lg flex w-full justify-between items-center hover:bg-gray-200 p-2"
+              className="relative w-64 h-14 bg-white shadow border rounded-lg flex justify-between items-center hover:bg-gray-200 p-2"
             >
               {message.message_text ? (
                 <div>
@@ -176,7 +171,7 @@ export default function EventDetail() {
                   There is no description for this event
                 </p>
               ) : (
-                <p className="flex-shrink-0 font-normal text-gray-500">
+                <p className="font-normal text-gray-500 whitespace-pre-wrap">
                   {event.description}
                 </p>
               )}

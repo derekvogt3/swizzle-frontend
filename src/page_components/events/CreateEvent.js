@@ -10,18 +10,17 @@ import TimePicker from "react-time-picker";
 import { FireTokenContext, UserContext } from "../../App";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import useScript from "react-script-hook";
+import useScript from "../../hooks/useScript";
 import { useEffect } from "react";
 
 export default function CreateEvent() {
   const params = useParams();
   let navigate = useNavigate();
-  const [loadingScript, scriptError] = useScript({
-    src:
-      "https://maps.googleapis.com/maps/api/js?key=" +
+  const status = useScript(
+    "https://maps.googleapis.com/maps/api/js?key=" +
       process.env.REACT_APP_GOOGLE_MAP_API +
-      "&libraries=places",
-  });
+      "&libraries=places"
+  );
 
   const userObj = useContext(UserContext);
   const fireToken = useContext(FireTokenContext);
@@ -86,7 +85,6 @@ export default function CreateEvent() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         navigate("/");
       });
   }
@@ -132,7 +130,7 @@ export default function CreateEvent() {
                   {location ? location : "Select Location..."}
                 </p>
               </div>
-              {!loadingScript ? (
+              {status === "ready" ? (
                 <div className="pb-4">
                   <LocationSearchInput
                     setLocation={setLocation}
@@ -146,7 +144,7 @@ export default function CreateEvent() {
                 h={"375px"}
                 w={"375px"}
                 latLng={latLng}
-                loadingScript={loadingScript}
+                loadingScript={status !== "ready"}
               />
             </div>
           </div>

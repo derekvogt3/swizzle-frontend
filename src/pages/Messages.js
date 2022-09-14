@@ -1,37 +1,31 @@
-import { Fragment } from "react";
-import {
-  CalendarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DotsHorizontalIcon,
-  LocationMarkerIcon,
-} from "@heroicons/react/solid";
-import { Menu, Transition } from "@headlessui/react";
+import { CalendarIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { useEffect } from "react";
-import Calendar from "../page_components/events/Calendar";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { FireTokenContext, UserContext } from "../App";
+import { FireTokenContext } from "../App";
 import { useContext } from "react";
 
 export default function Events() {
-  const [date, setDate] = useState("");
   const [events, setEvents] = useState([]);
   const fireToken = useContext(FireTokenContext);
   const [loading, setLoading] = useState(true);
-  console.log(fireToken);
 
   useEffect(() => {
     if (fireToken) {
-      fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "events/messages", {
         headers: { Authorization: fireToken },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          setEvents(data);
-          setLoading(false);
-        });
+        .then((res) => {
+          if (res.ok) {
+            res.json().then((data) => {
+              setEvents(data);
+              setLoading(false);
+            });
+          } else {
+            res.json().then((error) => console.log(error));
+          }
+        })
+        .catch((error) => console.log(error));
     }
   }, [fireToken]);
 
@@ -43,7 +37,7 @@ export default function Events() {
       </h2>
       <div className="flex gap-4 flex-wrap justify-center items-start">
         <div className="overflow-hidden grow bg-white shadow sm:rounded-md">
-          <ul role="list" className="divide-y divide-gray-200">
+          <ul className="divide-y divide-gray-200">
             {!loading ? (
               events.map((event) => (
                 <li key={event.id}>
@@ -78,21 +72,27 @@ export default function Events() {
                             </div>
                           </div>
                           <div className="flex">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              fill="currentColor"
-                              className="w-6 h-6 text-gray-400"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-
+                            <p className="flex-shrink-0 font-normal text-gray-500 whitespace-pre">
+                              {event.chat_messages.length > 0 ? (
+                                event.invitations.find(
+                                  (invite) =>
+                                    invite.user.id ===
+                                    event.chat_messages[
+                                      event.chat_messages.length - 1
+                                    ].user
+                                ).user.first_name + " said "
+                              ) : (
+                                <></>
+                              )}
+                            </p>
                             <p className="flex-shrink-0 font-normal text-gray-500">
-                              {event.location_name}
+                              {event.chat_messages.length > 0
+                                ? '"' +
+                                  event.chat_messages[
+                                    event.chat_messages.length - 1
+                                  ].message_text +
+                                  '"'
+                                : "No messages yet in chat"}
                             </p>
                           </div>
                         </div>

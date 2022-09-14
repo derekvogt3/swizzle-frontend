@@ -116,26 +116,13 @@ export default function Navbar({ setFireToken, auth }) {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href="/messages"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
                             Messages
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
                           </a>
                         )}
                       </Menu.Item>
@@ -228,23 +215,6 @@ export default function Navbar({ setFireToken, auth }) {
                     </div>
                   </div>
                   <div className="mt-3 space-y-1">
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-                      onClick={() => {
-                        close();
-                      }}
-                    >
-                      Your Profile
-                    </Link>
-
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-                    >
-                      Settings
-                    </Disclosure.Button>
                     <div
                       className="cursor-pointer block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                       onClick={() => {

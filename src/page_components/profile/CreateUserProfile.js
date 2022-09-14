@@ -30,7 +30,6 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
     let objectUrl = "";
 
     if (avatar) {
-      console.log("added object");
       objectUrl = URL.createObjectURL(avatar);
       setPreview(objectUrl);
     }
@@ -38,7 +37,6 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
     // free memory when ever this component is unmounted
     return () => {
       if (objectUrl) {
-        console.log("revoked");
         URL.revokeObjectURL(objectUrl);
       }
     };

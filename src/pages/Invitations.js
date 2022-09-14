@@ -18,7 +18,6 @@ export default function Invitations() {
   }, []);
 
   const fireToken = useContext(FireTokenContext);
-  console.log(invitations);
 
   return (
     <div className="p-4">
