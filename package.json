@@ -24,9 +24,9 @@
   },
   "scripts": {
     "start": "serve -s build",
-    "build": "npm install --prefix client && npm run build --prefix client",
+    "build": "npm install && npm run build ",
     "clean": "rm -rf public",
-    "deploy": "cp -a client/build/. public/",
+    "deploy": "cp -a /build/. public/",
     "heroku-postbuild": "npm run clean && npm run build && npm run deploy"
   },
   "eslintConfig": {
