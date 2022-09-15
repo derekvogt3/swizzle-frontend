@@ -20,7 +20,11 @@ export default function MessageDetail() {
 
   useEffect(() => {
     webSocket.current = new WebSocket(
-      "ws://localhost:8000/ws/chat/" + params.eventId + "/?token=" + fireToken
+      process.env.REACT_APP_BACKEND_WS +
+        "ws/chat/" +
+        params.eventId +
+        "/?token=" +
+        fireToken
     );
 
     webSocket.current.onmessage = (e) => {

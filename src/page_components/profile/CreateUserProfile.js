@@ -15,7 +15,7 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
     formData.append("last_name", lastName);
     formData.append("avatar", avatar);
 
-    fetch("http://localhost:8000/user/current/", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "user/current/", {
       headers: { Authorization: fireToken },
       method: "PATCH",
       body: formData,

@@ -75,7 +75,7 @@ export default function CreateEvent() {
         ":00.000Z",
     };
 
-    fetch("http://localhost:8000/events/", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
       method: "POST",
       headers: {
         Authorization: fireToken,
