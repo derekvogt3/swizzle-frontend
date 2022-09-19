@@ -106,7 +106,6 @@ function App() {
             <Route path=":eventId" element={<MessageDetail />} />
           </Route>
           {/* right now profile doesnt change the selected items up top */}
-          <Route path="profile" element={<Profile />} />
           <Route path="create" element={<CreateEvent />} />
         </Routes>
       </FireTokenContext.Provider>
