@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Before starting, run the backend at django link......
+Before starting, run the backend at django link.....
 
 ## Available Scripts
 
