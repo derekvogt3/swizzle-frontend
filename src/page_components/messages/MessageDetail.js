@@ -20,11 +20,12 @@ export default function MessageDetail() {
 
   useEffect(() => {
     webSocket.current = new WebSocket(
-      process.env.REACT_APP_BACKEND_WS +
-        "ws/chat/" +
-        params.eventId +
-        "/?token=" +
-        fireToken
+      process.env.REACT_APP_BACKEND_WS + "ws/chat/" + params.eventId + "/"
+
+      // removing for now to deploy to production sooner than later
+      // +
+      // "/?token=" +
+      // fireToken
     );
 
     webSocket.current.onmessage = (e) => {
@@ -71,6 +72,7 @@ export default function MessageDetail() {
   function handleSumbit() {
     webSocket.current.send(
       JSON.stringify({
+        user: currentUser.id,
         message: currentMessage,
       })
     );
