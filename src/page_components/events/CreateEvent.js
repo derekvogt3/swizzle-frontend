@@ -57,8 +57,18 @@ export default function CreateEvent() {
     return formattedHour + ":" + minute;
   }
 
+  function getUTC() {
+    const date = new Date();
+    const offset = date.getTimezoneOffset();
+    const sign = offset >= 0 ? "-" : "+";
+    const hours = Math.abs(offset / 60);
+    const minutes = Math.abs(offset % 60);
+    const hoursStr = `0${hours}`.slice(0, 2);
+    const minutesStr = `0${minutes}`.slice(0, 2);
+    return `${sign}${hoursStr}:${minutesStr}`;
+  }
+
   function handleCreateEvent() {
-    const time = hour + ":" + minute;
     const obj = {
       name: eventName,
       admin_id: userObj.id,
@@ -72,7 +82,8 @@ export default function CreateEvent() {
         date.date.toISOString().substring(0, 10) +
         "T" +
         convertTime() +
-        ":00.000Z",
+        ":00.000" +
+        getUTC(),
     };
 
     fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
