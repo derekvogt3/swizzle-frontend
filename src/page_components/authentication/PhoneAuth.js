@@ -4,8 +4,48 @@ import { useState } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
+import { XCircleIcon } from "@heroicons/react/solid";
+
+function PhoneErrorMessage({ showError }) {
+  return (
+    <div
+      className={`absolute mt-2 rounded-md bg-red-50 p-4 ${
+        showError ? "" : "hidden"
+      }`}
+    >
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+        </div>
+        <div className="ml-3">
+          <h3 className="text-sm font-medium text-red-800">
+            There were errors with your submission
+          </h3>
+          <div className="mt-2 text-sm text-red-700">
+            <ul role="list" className="list-disc space-y-1 pl-5">
+              <li>
+                Input a 10 digit XXX-XXX-XXXX phone number. We are currently
+                only available in the US (+1)
+              </li>
+              <li>Do not include any hyphens</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function phoneNumberCheck(inputtxt) {
+  var phoneno = /^\d{10}$/;
+  if (inputtxt.match(phoneno)) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 export default function PhoneAuth({ setAuthNav, setFireToken }) {
+  const [phoneNumberError, setPhoneNumberError] = useState(false);
   const [number, setNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [show, setshow] = useState(false);
@@ -45,6 +85,16 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
       })
       .catch((error) => alert("error getting user"));
   };
+
+  function handleButtonClick() {
+    if (phoneNumberCheck(number)) {
+      setShowCaptia(true);
+      signIn();
+    } else {
+      console.log("Test");
+      setPhoneNumberError(true);
+    }
+  }
 
   return (
     <>
@@ -87,17 +137,19 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
             {showCaptia ? (
               <div className="h-10"></div>
             ) : (
-              <button
-                id="sign-in-button"
-                type="submit"
-                onClick={() => {
-                  setShowCaptia(true);
-                  signIn();
-                }}
-                className="flex w-full h-10 justify-center rounded-md border border-transparent bg-swizblue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizblue-dark focus:outline-none focus:ring-2 focus:ring-swizblue-light focus:ring-offset-2"
-              >
-                Confirm
-              </button>
+              <div className="relative">
+                <button
+                  id="sign-in-button"
+                  type="submit"
+                  onClick={() => {
+                    handleButtonClick();
+                  }}
+                  className="flex w-full h-10 justify-center rounded-md border border-transparent bg-swizblue py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-swizblue-dark focus:outline-none focus:ring-2 focus:ring-swizblue-light focus:ring-offset-2"
+                >
+                  Confirm
+                </button>
+                <PhoneErrorMessage showError={phoneNumberError} />
+              </div>
             )}
           </div>
           <div
@@ -144,36 +196,4 @@ export default function PhoneAuth({ setAuthNav, setFireToken }) {
       )}
     </>
   );
-}
-
-{
-  /* <div style={{ marginTop: "200px" }}>
-      <center>
-        <div style={{ display: !show ? "block" : "none" }}>
-          <input
-            value={mynumber}
-            onChange={(e) => {
-              setnumber(e.target.value);
-            }}
-            placeholder="phone number"
-          />
-          <br />
-          <br />
-          <div id="recaptcha-container" className="justify-center flex"></div>
-          <button onClick={signin}>Send OTP</button>
-        </div>
-        <div style={{ display: show ? "block" : "none" }}>
-          <input
-            type="text"
-            placeholder={"Enter your OTP"}
-            onChange={(e) => {
-              setotp(e.target.value);
-            }}
-          ></input>
-          <br />
-          <br />
-          <button onClick={ValidateOtp}>Verify</button>
-        </div>
-      </center>
-    </div> */
 }
