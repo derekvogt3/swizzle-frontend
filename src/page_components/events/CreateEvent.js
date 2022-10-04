@@ -11,7 +11,7 @@ import { FireTokenContext, UserContext } from "../../App";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import useScript from "../../hooks/useScript";
-import { useEffect } from "react";
+import CreateEventValidation from "./CreateEventValidations";
 
 export default function CreateEvent() {
   const params = useParams();
@@ -24,7 +24,7 @@ export default function CreateEvent() {
 
   const userObj = useContext(UserContext);
   const fireToken = useContext(FireTokenContext);
-  const [date, setDate] = useState(setDateFromParams());
+  const [date, setDate] = useState("");
 
   const [hour, setHour] = useState("7");
   const [minute, setMinute] = useState("30");
@@ -36,11 +36,25 @@ export default function CreateEvent() {
   const [numberOfAttendees, setNumberOfAttendees] = useState(6);
   const [description, setDescription] = useState("");
 
-  function setDateFromParams() {
-    if (params.year && params.month && params.day) {
-      return new Date(params.year + "-" + params.month + "-" + params.day);
+  const [openValidation, setOpenValidation] = useState(false);
+  const [validationMessage, setValidationMessage] = useState([]);
+
+  function validate() {
+    setValidationMessage([]);
+    if (!eventName) {
+      setValidationMessage((arr) => [...arr, "Event Name must not be blank"]);
     }
-    return "";
+    if (!location) {
+      setValidationMessage((arr) => [...arr, "A Location must be selected"]);
+    }
+    if (!date) {
+      setValidationMessage((arr) => [...arr, "An Event Date must be selected"]);
+    }
+    if (!eventName || !location || !date) {
+      setOpenValidation(true);
+      return false;
+    }
+    return true;
   }
 
   function convertTime() {
@@ -69,35 +83,37 @@ export default function CreateEvent() {
   }
 
   function handleCreateEvent() {
-    const obj = {
-      name: eventName,
-      admin_id: userObj.id,
-      event_settings: "",
-      location_name: location,
-      location_lat: latLng.lat,
-      location_lng: latLng.lng,
-      number_of_attendees: numberOfAttendees,
-      description: description,
-      event_datetime:
-        date.date.toISOString().substring(0, 10) +
-        "T" +
-        convertTime() +
-        ":00.000" +
-        getUTC(),
-    };
+    if (validate()) {
+      const obj = {
+        name: eventName,
+        admin_id: userObj.id,
+        event_settings: "",
+        location_name: location,
+        location_lat: latLng.lat,
+        location_lng: latLng.lng,
+        number_of_attendees: numberOfAttendees,
+        description: description,
+        event_datetime:
+          date.date.toISOString().substring(0, 10) +
+          "T" +
+          convertTime() +
+          ":00.000" +
+          getUTC(),
+      };
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
-      method: "POST",
-      headers: {
-        Authorization: fireToken,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(obj),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        navigate("/");
-      });
+      fetch(process.env.REACT_APP_BACKEND_URL + "events/", {
+        method: "POST",
+        headers: {
+          Authorization: fireToken,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          navigate("/");
+        });
+    }
   }
 
   return (
@@ -245,6 +261,11 @@ export default function CreateEvent() {
             >
               Create Event
             </button>
+            <CreateEventValidation
+              setOpenValidation={setOpenValidation}
+              openValidation={openValidation}
+              validationMessage={validationMessage}
+            />
           </div>
         </div>
       </div>
