@@ -7,8 +7,35 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
   const [lastName, setLastName] = useState("");
   const [avatar, setAvatar] = useState("");
   const [preview, setPreview] = useState("");
+  const [validations, setValidations] = useState({
+    username: [
+      { show: false, text: "Username must not be blank" },
+      { show: false, text: "Username Already Exists" },
+    ],
+    firstname: { show: false, text: "First Name must not be blank" },
+    lastname: { show: false, text: "Last Name must not be blank" },
+  });
 
   async function handleSubmit() {
+    if (!userName || !firstName || !lastName) {
+      const newValidations = {};
+
+      for (let key in validations) {
+        newValidations[key] = validations[key];
+      }
+
+      if (!userName) {
+        newValidations.username[0].show = true;
+      }
+      if (!firstName) {
+        newValidations.firstname.show = true;
+      }
+      if (!lastName) {
+        newValidations.lastname.show = true;
+      }
+      return setValidations(newValidations);
+    }
+
     const formData = new FormData();
     formData.append("username", userName);
     formData.append("first_name", firstName);
@@ -25,7 +52,17 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
         }
       );
       const data = await res.json();
-      setUserObj(data);
+      if (!res.ok) {
+        const newValidations = {};
+
+        for (let key in validations) {
+          newValidations[key] = validations[key];
+        }
+        newValidations.username[1].show = true;
+        setValidations(newValidations);
+      } else {
+        setUserObj(data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -77,6 +114,20 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
             />
+            <p
+              className={`text-sm text-red-400 ${
+                validations.username[0].show ? "" : "hidden"
+              }`}
+            >
+              {validations.username[0].text}
+            </p>
+            <p
+              className={`text-sm text-red-400 ${
+                validations.username[1].show ? "" : "hidden"
+              }`}
+            >
+              {validations.username[1].text}
+            </p>
           </div>
         </div>
         <div className="">
@@ -96,6 +147,13 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
               className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
             />
           </div>
+          <p
+            className={`text-sm text-red-400 ${
+              validations.firstname.show ? "" : "hidden"
+            }`}
+          >
+            {validations.firstname.text}
+          </p>
         </div>
         <div className="">
           <label
@@ -114,6 +172,13 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
               className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
             />
           </div>
+          <p
+            className={`text-sm text-red-400 ${
+              validations.lastname.show ? "" : "hidden"
+            }`}
+          >
+            {validations.lastname.text}
+          </p>
         </div>
 
         <div className="pt-2">
