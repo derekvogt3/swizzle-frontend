@@ -8,21 +8,27 @@ export default function CreateUserProfile({ fireToken, setUserObj }) {
   const [avatar, setAvatar] = useState("");
   const [preview, setPreview] = useState("");
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const formData = new FormData();
     formData.append("username", userName);
     formData.append("first_name", firstName);
     formData.append("last_name", lastName);
     formData.append("avatar", avatar);
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "user/current/", {
-      headers: { Authorization: fireToken },
-      method: "PATCH",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => setUserObj(data))
-      .catch((error) => console.log(error));
+    try {
+      const res = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "user/current/",
+        {
+          headers: { Authorization: fireToken },
+          method: "PATCH",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+      setUserObj(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
